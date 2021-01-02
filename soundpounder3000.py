@@ -1,4 +1,5 @@
 import math
+import os
 
 import numpy as np
 from pprint import pprint
@@ -8,7 +9,7 @@ from parse import parse_song
 from settings import SAMPLE_RATE
 import settings
 
-def gen_waveform(freq, duration=0.5, volume=1.0, ramp=False):
+def gen_waveform(freq, duration=0.5, volume=1.0, ramp=True):
     amplitude = 4096 * volume
     num_samples = int(SAMPLE_RATE * duration)
     t = np.linspace(0, duration, num_samples)
@@ -50,4 +51,4 @@ def fiddle_to_wav(fiddle):
         base_indices = waveform_indices + time_samples
         base[base_indices] += waveform[waveform_indices]
 
-    write(title + '.wav', SAMPLE_RATE, base.astype(np.int16))
+    write(os.path.join("waves/", title + '.wav'), SAMPLE_RATE, base.astype(np.int16))

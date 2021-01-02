@@ -1,4 +1,4 @@
-
+import os
 
 from playsound import playsound
 
@@ -23,7 +23,8 @@ spirited_away_one_summers_day = (
 )
 
 fiddle_to_wav(spirited_away_one_summers_day)
-playsound("One_Summer's_Day" + ".wav")
+path = os.path.join("waves/", "One_Summer's_Day" + ".wav")
+playsound(path)
 
 # fiddle_to_wav(test)
 # playsound("Test" + ".wav")
