@@ -1,3 +1,6 @@
+'''TODO:
+make A the base frequency because the octaves are fucked up for A and B if you start at C'''
+
 class Note:
     MIDDLE_OCTAVE = 4
     MIDDLE_C_FREQ = 261.63

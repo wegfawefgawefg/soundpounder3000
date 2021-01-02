@@ -62,7 +62,7 @@ def parse_song(song_string):
             duration = beats_to_time(bpm, relative_duration)
             volume = token_params.volume if token_params.volume else base_volume
 
-            print(note)
+            # print(note)
 
             tone = Tone(cursor, note, duration, volume)
             tones.append(tone)
