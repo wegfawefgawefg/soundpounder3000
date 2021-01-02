@@ -18,7 +18,7 @@ class Note:
 
     def get_freq(self):
         freq = Note.MIDDLE_C_FREQ * pow(2, self.num / 12)
-        freq = freq * pow(2, Note.MIDDLE_OCTAVE - self.octave)  #   shift up/down by octave
+        freq = freq * pow(2, self.octave - Note.MIDDLE_OCTAVE)  #   shift up/down by octave
 
         return freq
 

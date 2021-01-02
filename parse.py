@@ -6,7 +6,7 @@ from tone import Tone
 from note import Note
 
 def beats_to_time(bpm, step_size):
-    bps = bpm / 60
+    bps = 60 / bpm
     time_to_step = bps * step_size
 
     return time_to_step
@@ -61,6 +61,8 @@ def parse_song(song_string):
             relative_duration = token_params.duration if token_params.duration else base_duration
             duration = beats_to_time(bpm, relative_duration)
             volume = token_params.volume if token_params.volume else base_volume
+
+            print(note)
 
             tone = Tone(cursor, note, duration, volume)
             tones.append(tone)
