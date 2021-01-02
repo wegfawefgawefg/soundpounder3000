@@ -1,2 +1,5 @@
 # soundpounder3000
-me writing waves with numpy thats it
+write a fiddle 
+import fiddle_to_wav()
+play ur wave
+profit?
