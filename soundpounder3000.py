@@ -16,10 +16,10 @@ def gen_waveform(freq, duration=0.5, volume=1.0, ramp=True):
     wave = amplitude * np.sin(2 * np.pi * freq * t)
 
     if ramp:
-        ramp_duration = num_samples / 20
+        ramp_duration = int(num_samples / 20)
 
-        ramp_up = np.linspace(0, 1, ramp_duration)
-        ramp_down = np.linspace(1, 0, ramp_duration)
+        ramp_up = np.linspace(0, 1.0, ramp_duration)
+        ramp_down = np.linspace(1.0, 0, ramp_duration)
 
         ramp_up_indices = np.arange(ramp_duration - 1, dtype=np.int64)
         wave[ramp_up_indices] *= ramp_up[ramp_up_indices]
