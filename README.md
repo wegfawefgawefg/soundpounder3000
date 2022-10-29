@@ -4,7 +4,8 @@ run compose.py for cool
 
 ## added
 
-- add time savepoints so it can go back to the last { at an }
+- time savepoints so it can go back to the last { at an }
+- more instruments
 
 ## fixed
 
@@ -13,6 +14,7 @@ run compose.py for cool
 ## todo
 
 - normalize volumes / may no longer be necessary
-- add more instruments
+- fix bug where the last note doesnt represent the needed music duration
+- fix double nesting of cursor jumps
 
 ## notes
