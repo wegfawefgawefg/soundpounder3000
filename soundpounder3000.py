@@ -91,5 +91,8 @@ def fiddle_to_wav(fiddle):
         base_indices = waveform_indices + time_samples
         base[base_indices] += waveform[waveform_indices]
 
+    if not os.path.exists("waves"):
+        os.makedirs("./waves")
+
     write(os.path.join("waves/", title + '.wav'), SAMPLE_RATE, base.astype(np.int16))
     return title
