@@ -19,8 +19,10 @@ def parse_song(song_string):
     base_octave = 4
     base_duration = 1
     base_volume = 1
+    time_stack = []
     auto_step = True
     cursor = 0
+    instrument = "sine"
     tones = []
     for token in tokens:
         head = token[0]
@@ -45,12 +47,18 @@ def parse_song(song_string):
         elif head == ']':   #   enable auto step
             auto_step = True
             cursor += beats_to_time(bpm, base_duration)
+        elif head == '{':   #   push cursor
+            time_stack.append(cursor)
+        elif head == '}':   #   pop cursor
+            cursor = time_stack.pop()
+        elif head == 'i':   #   set instrument
+            instrument = tail
         elif head == 'f':   #   move cursor
-            if not tail == '':
+            if tail == '':  #   no explicit duration given, use base duration
+                cursor += beats_to_time(bpm, base_duration)
+            else:
                 duration = parse_num_or_frac(tail)
                 cursor += beats_to_time(bpm, duration)
-            else:
-                cursor += beats_to_time(bpm, base_duration)
         elif head in Note.all_notes():
             note_string = token.split('_')[0]
             octave = token_params.octave if token_params.octave else base_octave
@@ -64,7 +72,7 @@ def parse_song(song_string):
 
             # print(note)
 
-            tone = Tone(cursor, note, duration, volume)
+            tone = Tone(cursor, note, duration, volume, instrument)
             tones.append(tone)
 
             if auto_step:
