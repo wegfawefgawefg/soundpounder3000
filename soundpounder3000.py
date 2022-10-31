@@ -31,8 +31,12 @@ def gen_waveform(freq, duration, volume, instrument='sine'):
         return gen_squarewave(freq, duration, volume)
     elif instrument == 'noise':
         return gen_noise(freq, duration, volume)
+    elif instrument == 'string':
+        return gen_string(freq, duration, volume)
+    else:
+        return gen_soft_sinwave(freq, duration, volume)
 
-def gen_soft_sinwave(freq, duration=0.5, volume=1.0, ramp=True):
+def gen_soft_sinwave(freq, duration, volume, ramp=True):
     amplitude = 4096 * volume
     num_samples = int(SAMPLE_RATE * duration)
     t = np.linspace(0, duration, num_samples)
@@ -41,7 +45,7 @@ def gen_soft_sinwave(freq, duration=0.5, volume=1.0, ramp=True):
         apply_ramp(wave)
     return wave
 
-def gen_squarewave(freq, duration=0.5, volume=1.0, ramp=True):
+def gen_squarewave(freq, duration, volume, ramp=True):
     amplitude = 4096 * volume
     num_samples = int(SAMPLE_RATE * duration)
     t = np.linspace(0, duration, num_samples)
@@ -57,13 +61,50 @@ def gen_squarewave(freq, duration=0.5, volume=1.0, ramp=True):
 
     return wave
 
-def gen_noise(freq, duration=0.5, volume=1.0, ramp=True):
+def gen_noise(freq, duration, volume, ramp=True):
     amplitude = 4096 * volume
     num_samples = int(SAMPLE_RATE * duration)
     t = np.linspace(0, duration, num_samples)
     wave = amplitude * np.random.normal(0, 1, num_samples)
     if ramp:
         apply_ramp(wave)
+    return wave
+
+def gen_string(freq, duration, volume, ramp=True):
+    amplitude = 4096 * volume
+    num_samples = int(SAMPLE_RATE * duration)
+    t = np.linspace(0, duration, num_samples)
+    # account for harmonics
+    harmonics = []
+    wave = np.zeros(num_samples)
+    num_harmonics = 8
+    for i in range(1, num_harmonics + 1):
+        di = 8.0
+        frequency = freq * (float(i + di) / (di + 1))
+        pprint(frequency)
+        amp = amplitude * (1.0 / i)
+        offset = 0
+        wave += amp * np.sin(2 * np.pi * frequency * t + offset)
+        harmonics.append((frequency, amp))
+    
+    # # plot the harmonics
+    # # make a plot
+    # xs = []
+    # ys = []
+    # for harmonic in harmonics:
+    #     xs.append(harmonic[0])
+    #     ys.append(harmonic[1])
+    # plt.bar(xs, ys)
+    # # make the lines thicker
+    # plt.rcParams['lines.linewidth'] = 20
+    # plt.show()
+
+    wave *= np.exp(-t * 10) # attenuate the wave exponentially
+    if ramp:
+        apply_ramp(wave)
+
+    # plt.plot(wave)
+    # plt.show()
     return wave
 
 def fiddle_to_wav(fiddle):
@@ -77,7 +118,10 @@ def fiddle_to_wav(fiddle):
     base = np.zeros(song_length_samples)
 
     for tone in tones:
-        waveform = gen_waveform(tone.note.get_freq(), tone.duration, tone.volume, tone.instrument)
+        waveform = gen_waveform(tone.note.get_freq(), tone.duration, tone.volume, 
+            tone.instrument
+            # "string"
+        )
         # plt.plot(waveform)
         # plt.show()
 

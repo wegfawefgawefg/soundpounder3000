@@ -227,7 +227,18 @@ computer_polka = (
     " G_o6_d4 "
 )
 
-title = fiddle_to_wav(computer_polka)
+string_test = (
+    "tString_Test s400 "
+    " istring "
+    " C_d3 "
+
+)
+# title = fiddle_to_wav(computer_polka)
+title = fiddle_to_wav(
+    computer_polka
+    # complex_test
+    # simple_test
+)
 path = os.path.join("waves/", f"{title}.wav")
 playsound(path)
 

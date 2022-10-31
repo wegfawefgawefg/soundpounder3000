@@ -16,5 +16,6 @@ run compose.py for cool
 - normalize volumes / may no longer be necessary
 - fix bug where the last note doesnt represent the needed music duration
 - fix double nesting of cursor jumps
+- clean up the location of the output existing in two places for no good reason
 
 ## notes
