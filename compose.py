@@ -5,11 +5,11 @@ from playsound import playsound
 
 from soundpounder3000 import fiddle_to_wav
 
-'''     SONGS   '''
-twinkle_twinkle = 'ttwinkle_twinkle s120 C C G G A A G r F F E E D D C r G G F F E E D r G G F F E E D r C C G G A A G r F F E E D D C'
-something = 'C E G C E G C E G C E G C E G C E G B B B B'
-larrys_song = 'tlarryssong Eb C C# D E F# A G D B G# A B C E D# D C C# D B A G F# D D D D D D D D D D D D D D D'
-fiddle = 'tMy_Fuckin_Song_Title s60 d1/16 C E G C E G C E G'
+"""     SONGS   """
+twinkle_twinkle = "ttwinkle_twinkle s120 C C G G A A G r F F E E D D C r G G F F E E D r G G F F E E D r C C G G A A G r F F E E D D C"
+something = "C E G C E G C E G C E G C E G C E G B B B B"
+larrys_song = "tlarryssong Eb C C# D E F# A G D B G# A B C E D# D C C# D B A G F# D D D D D D D D D D D D D D D"
+fiddle = "tMy_Fuckin_Song_Title s60 d1/16 C E G C E G C E G"
 larrysshittysong = "tLarry's_Shitty_Song s60 C_o4_d1/16 o4 r r_d1/16 o4 d1/16 C [ C_d4 f1 E_d3 f1 G_d2 f1 B_d1_o+1 ] f1 b d1 [ C E_v0.5 G_v0.25 B_o+1 ]"
 test = "tTest s120 C_o1 C_o2 C_o3 C_o4 C_o5 C_o6 C_o7 C_o8"
 spirited_away_one_summers_day = (
@@ -18,7 +18,6 @@ spirited_away_one_summers_day = (
     "[ E f0.1 A_o5 f0.1 B_o5 ] "
     "[ D f0.1 G f0.1 A#_o5 ] "
     "[ C f0.1 D f0.1 F# f0.1 G f0.1 A_o5 f0.1 D_o6 ] r_d0.5 "
-
     "E_d2 d0.5 E_o5 E_o5 E_o5 E_o5 D_o5 E_o5 A_o5 E_o5 D_o5_d0.25 D_o5_d1 r_d0.5 "
     "D_o5 D_o5 D_o5 D_o5 C_o5 D_o5 G_o5 D_o5 C_o5 B_o4 C_o5_d1 "
 )
@@ -28,7 +27,6 @@ interesting = (
     "[ E f0.1 A_o5 f0.1 B_o5 ] "
     "[ D f0.1 G f0.1 A#_o5 ] "
     "[ C f0.1 D f0.1 F# f0.1 G f0.1 A_o5 f0.1 D_o6 ] r_d0.5 "
-
     # 2nd intro chord sequence, same as 1st, but 4 half steps higher
     "[ A f0.1 B f0.1 C#_o6 f0.1 E_o6 f0.1 G#_o6 ] f-0.2 "
     "[ G# f0.1 C#_o6 f0.1 D#_o6 ] "
@@ -63,7 +61,6 @@ interesting = (
 happy_birthday = (
     "tHappy_Birthday s120 "
     "C_o4 f0.1 D f0.1 E f0.1 C f0.1 C f0.1 D f0.1 E f0.1 C f0.1 E f0.1 G f0.1 E f0.1 G f0.1 A f0.1 G f0.1 E f0.1 C f0.1 C f0.1 D f0.1 E f0.1 C f0.1 G f0.1 E f0.1 C f0.1 C f0.1 D f0.1 E f0.1 C f0.1 E f0.1 G f0.1 E f0.1 G f0.1 A f0.1 G f0.1 E f0.1 C"
-
 )
 # simple test of every note from c to c_10
 full_range_test = (
@@ -85,10 +82,7 @@ full_range_test = (
 # "[ D F A C ] "
 # "[ F A C E ] "
 # "[ A C E G ] "
-
-# note order for major chords is half steps of 4, 3, 4, 3 repeating
-#   TODO
-#   auto chording
+fiddle
 #   itterative chords from root, major or minor
 #   seemlessly chain them into the song
 #   being able to shift the octave up
@@ -103,7 +97,6 @@ complex_test = (
     "[ B D_o5 F#_o5 A_o5 ] "
     "d2 [ D_o5 F#_o5 A_o5 C#_o6 ] "
     "d1 "
-
     # shift forward by 4 half steps
     "[ E G B D_o5 ] "
     "[ G B D_o5 F#_o5 ] "
@@ -111,7 +104,6 @@ complex_test = (
     "[ D_o5 F#_o5 A_o5 C#_o6 ] "
     "d2 [ F#_o5 A_o5 C#_o6 E_o6 ] "
     "d1 "
-
     # final chirp
     "d2 [ F#_o5 A_o5 C#_o6 E_o6 ] "
     "d1 [ F#_o5 A_o5 C#_o6 E_o6 ] "
@@ -119,16 +111,16 @@ complex_test = (
     "d6 [ G_o5 B_o5 D_o6 F#_o6 ] "
 )
 
-    # "d4 [ A_o5 C#_o6 E_o6 G#_o6 ] "
+# "d4 [ A_o5 C#_o6 E_o6 G#_o6 ] "
 
-    # "[ C#_o6 E_o6 G#_o6 B_o6 ] "
-    # "[ E_o6 G#_o6 B_o6 D_o7 ] "
-    # "[ G#_o6 B_o6 D_o7 F#_o7 ] "
-    # "[ B_o6 D_o7 F#_o7 A_o7 ] "
-    # "[ D_o7 F#_o7 A_o7 C#_o8 ] "
-    # "[ F#_o7 A_o7 C#_o8 E_o8 ] "
-    # "[ A_o7 C#_o8 E_o8 G#_o8 ] "
-    # "[ C#_o8 E_o8 G#_o8 B_o8 ] "
+# "[ C#_o6 E_o6 G#_o6 B_o6 ] "
+# "[ E_o6 G#_o6 B_o6 D_o7 ] "
+# "[ G#_o6 B_o6 D_o7 F#_o7 ] "
+# "[ B_o6 D_o7 F#_o7 A_o7 ] "
+# "[ D_o7 F#_o7 A_o7 C#_o8 ] "
+# "[ F#_o7 A_o7 C#_o8 E_o8 ] "
+# "[ A_o7 C#_o8 E_o8 G#_o8 ] "
+# "[ C#_o8 E_o8 G#_o8 B_o8 ] "
 
 complex_test = (
     "tSimple_Test s400 "
@@ -149,15 +141,11 @@ complex_test = (
     " C E G C_o5_d4 "
 )
 
-simple_test = (
-    "tSimple_Test s600 "
-    " C "
-)
+simple_test = "tSimple_Test s600 " " C "
 
 computer_polka = (
     # a simple polka in c major. 4/4 time. 80 bpm
     "tComputer_Polka s80 "
-
     # rumpatum drum beat
     " inoise "
     "d0.125 "
@@ -172,8 +160,6 @@ computer_polka = (
     " C r C C C r C r C C C r "
     " C "
     " } "
-
-
     # simple polka baseline in C major
     " isquare "
     " d0.5 "
@@ -185,59 +171,136 @@ computer_polka = (
     " C_o4 G_o3 C_o4 G_o3 C_o4 G_o3 C_o4 "
     " C_o3_d4 "
     " } "
-
     # simple polka rhythm
     " isquare "
     " v1.0 "
     " d0.25 "
     " { "
-    " r r r " 
-    " C_o5 E_o5 G_o5 " 
-    " C_o5 F_o5 A_o5 " 
-    " C_o5 F_o5 A_o5 " 
-
-    " C_o5 G_o5 B_o5 " 
-    " C_o5 G_o5 B_o5 " 
-    " C_o5 E_o5 G_o5 " 
-    " C_o5 E_o5 G_o5 " 
-
-    " C_o5 B_o4 D_o5 " 
-    " C_o5 B_o4 D_o5 " 
-    " C_o5 A_o4 C_o5 " 
-    " C_o5 A_o4 C_o5 " 
-
-    " C_o5 G_o4 B_o4 " 
-    " C_o5 G_o4 B_o4 " 
-    " C_o5 E_o5 B_o4 " 
-    " C_o6_d4 " 
+    " r r r "
+    " C_o5 E_o5 G_o5 "
+    " C_o5 F_o5 A_o5 "
+    " C_o5 F_o5 A_o5 "
+    " C_o5 G_o5 B_o5 "
+    " C_o5 G_o5 B_o5 "
+    " C_o5 E_o5 G_o5 "
+    " C_o5 E_o5 G_o5 "
+    " C_o5 B_o4 D_o5 "
+    " C_o5 B_o4 D_o5 "
+    " C_o5 A_o4 C_o5 "
+    " C_o5 A_o4 C_o5 "
+    " C_o5 G_o4 B_o4 "
+    " C_o5 G_o4 B_o4 "
+    " C_o5 E_o5 B_o4 "
+    " C_o6_d4 "
     " } "
-
     # # high fast twinkly notes
     " v0.75"
     " isine "
     " d0.25 "
     " C_o7 r G_o6 r A_o6 r E_o6 r "
     " A_o6 r E_o6 r G_o6 r C_o6 r "
-
     " C_o7 r G_o6 r A_o6 r E_o6 r "
     " A_o6 r E_o6 r G_o6 r C_o6 r "
-
     " C_o7 r G_o6 r A_o6 r E_o6 r "
     " A_o6 r B_o6 "
     " G_o6_d4 "
 )
 
-string_test = (
-    "tString_Test s400 "
-    " istring "
-    " C_d3 "
-
+chord_test = (
+    "tChord_Demo s120"  # Title and speed
+    # Triads
+    " isine v1.0 d0.25 "
+    " [ C_o4 E_o4 G_o4 ] "
+    " [ D_o4 F_o4 A_o4 ] "
+    " [ E_o4 G_o4 B_o4 ] "
+    " [ F_o4 A_o4 C_o5 ] "
+    " [ G_o4 B_o4 D_o5 ] "
+    " [ A_o4 C_o5 E_o5 ] "
+    " [ B_o4 D_o5 F_o5 ] "
+    " [ C_o5 E_o5 G_o5 ] "
+    # # Seventh Chords
+    " [ C_o4 E_o4 G_o4 B_o4 ] "
+    " [ D_o4 F_o4 A_o4 C_o5 ] "
+    " [ E_o4 G_o4 B_o4 D_o5 ] "
+    " [ F_o4 A_o4 C_o5 E_o5 ] "
+    " [ G_o4 B_o4 D_o5 F_o5 ] "
+    " [ A_o4 C_o5 E_o5 G_o5 ] "
+    " [ B_o4 D_o5 F_o5 A_o5 ] "
+    " [ C_o5 E_o5 G_o5 B_o5 ] "
+    # # Extended Chords
+    " [ C_o4 E_o4 G_o4 B_o4 D_o5 ] "
+    " [ D_o4 F_o4 A_o4 C_o5 E_o5 ] "
+    " [ E_o4 G_o4 B_o4 D_o5 F#_o5 ] "
+    " [ F_o4 A_o4 C_o5 E_o5 G_o5 ] "
+    " [ G_o4 B_o4 D_o5 F_o5 A_o5 ] "
+    " [ A_o4 C_o5 E_o5 G_o5 B_o5 ] "
+    " [ B_o4 D_o5 F_o5 A_o5 C_o6 ] "
+    # # Altered Chords
+    " [ C_o4 E_o4 G#_o4 Bb_o4 ] "
+    " [ D_o4 F_o4 Ab_o4 C_o5 ] "
+    " [ G_o4 B_o4 D_o5 F_o5 Ab_o5 ] "
+    # # Suspended Chords
+    " [ C_o4 D_o4 G_o4 ] "
+    " [ C_o4 F_o4 G_o4 ] "
+    " [ G_o4 A_o4 D_o5 ] "
+    " [ G_o4 C_o5 D_o5 ] "
+    # # Add Chords
+    " [ C_o4 E_o4 G_o4 D_o5 ] "
+    " [ D_o4 F_o4 A_o4 E_o5 ] "
+    " [ F_o4 A_o4 C_o5 G_o5 ] "
 )
+
+jazzy_chord_test = (
+    "tJazzy_Chord_Demo s120"  # Title and speed
+    # Jazz Triads
+    " isine v1.0 d0.5 "
+    " [ C_o4 E_o4 G_o4 ] "
+    " [ E_o4 G#_o4 C_o5 ] "
+    " [ G_o4 B_o4 D_o5 ] "
+    " [ B_o4 D#_o5 F#_o5 ] "
+    # 7th Chords with 9th extensions
+    " d1 "
+    " [ C_o4 E_o4 G_o4 B_o4 D_o5 ] "
+    " [ F_o4 A_o4 C_o5 E_o5 G_o5 ] "
+    " [ Bb_o4 D_o5 F_o5 A_o5 C_o6 ] "
+    # Minor 9th Chords
+    " [ D_o4 F_o4 A_o4 C_o5 E_o5 ] "
+    " [ E_o4 G_o4 B_o4 D_o5 F#_o5 ] "
+    " [ A_o4 C_o5 E_o5 G_o5 B_o5 ] "
+    # 11th Chords
+    " [ G_o4 B_o4 D_o5 F_o5 A_o5 C_o6 ] "
+    " [ B_o4 D#_o5 F#_o5 A_o5 C#_o6 E_o6 ] "
+    # 13th Chords
+    " [ D_o4 F#_o4 A_o4 C_o5 E_o5 G_o5 B_o5 ] "
+    " [ G_o4 B_o4 D_o5 F_o5 A_o5 C_o6 E_o6 ] "
+    # Altered Chords
+    " [ F_o4 A_o4 C_o5 E_o5 G#_o5 ] "
+    " [ B_o4 D#_o5 F#_o5 A_o5 C_o6 ] "
+    # Diminished and Half-Diminished Chords
+    " [ C_o4 E_o4 G_o4 B_o4 ] "  # Diminished 7th
+    " [ D_o4 F_o4 Ab_o4 C_o5 ] "  # Half-Diminished
+    # Augmented Chords
+    " [ E_o4 G#_o4 C_o5 ] "
+    " [ A_o4 C#_o5 F_o5 ] "
+)
+
+
+string_test = "tString_Test s400 " " istring " " C_d3 "
 # title = fiddle_to_wav(computer_polka)
 title = fiddle_to_wav(
-    computer_polka
+    # computer_polka
     # complex_test
     # simple_test
+    # full_range_test
+    # twinkle_twinkle
+    # test
+    # fiddle
+    # something
+    # larrys_song
+    # larrysshittysong
+    # spirited_away_one_summers_day
+    # chord_test
+    jazzy_chord_test
 )
 path = os.path.join("waves/", f"{title}.wav")
 playsound(path)

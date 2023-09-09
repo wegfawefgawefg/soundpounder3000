@@ -4,11 +4,11 @@ from playsound import playsound
 
 from soundpounder3000 import fiddle_to_wav
 
-'''     SONGS   '''
-twinkle_twinkle = 'ttwinkle_twinkle s120 C C G G A A G r F F E E D D C r G G F F E E D r G G F F E E D r C C G G A A G r F F E E D D C'
-something = 'C E G C E G C E G C E G C E G C E G B B B B'
-larrys_song = 'tlarryssong Eb C C# D E F# A G D B G# A B C E D# D C C# D B A G F# D D D D D D D D D D D D D D D'
-fiddle = 'tMy_Fuckin_Song_Title s60 d1/16 C E G C E G C E G'
+"""     SONGS   """
+twinkle_twinkle = "ttwinkle_twinkle s120 C C G G A A G r F F E E D D C r G G F F E E D r G G F F E E D r C C G G A A G r F F E E D D C"
+something = "C E G C E G C E G C E G C E G C E G B B B B"
+larrys_song = "tlarryssong Eb C C# D E F# A G D B G# A B C E D# D C C# D B A G F# D D D D D D D D D D D D D D D"
+fiddle = "tMy_Fuckin_Song_Title s60 d1/16 C E G C E G C E G"
 larrysshittysong = "tLarry's_Shitty_Song s60 C_o4_d1/16 o4 r r_d1/16 o4 d1/16 C [ C_d4 f1 E_d3 f1 G_d2 f1 B_d1_o+1 ] f1 b d1 [ C E_v0.5 G_v0.25 B_o+1 ]"
 test = "tTest s120 C_o1 C_o2 C_o3 C_o4 C_o5 C_o6 C_o7 C_o8"
 spirited_away_one_summers_day = (
@@ -23,7 +23,6 @@ spirited_away_one_summers_day = (
 happy_birthday = (
     "tHappy_Birthday s120 "
     "C_o4 f0.1 D f0.1 E f0.1 C f0.1 C f0.1 D f0.1 E f0.1 C f0.1 E f0.1 G f0.1 E f0.1 G f0.1 A f0.1 G f0.1 E f0.1 C f0.1 C f0.1 D f0.1 E f0.1 C f0.1 G f0.1 E f0.1 C f0.1 C f0.1 D f0.1 E f0.1 C f0.1 E f0.1 G f0.1 E f0.1 G f0.1 A f0.1 G f0.1 E f0.1 C"
-
 )
 # simple test of every note from c to c_10
 full_range_test = (
@@ -59,7 +58,6 @@ complex_test = (
     "[ B D_o5 F#_o5 A_o5 ] "
     "d2 [ D_o5 F#_o5 A_o5 C#_o6 ] "
     "d1 "
-
     # shift forward by 4 half steps
     "[ E G B D_o5 ] "
     "[ G B D_o5 F#_o5 ] "
@@ -67,7 +65,6 @@ complex_test = (
     "[ D_o5 F#_o5 A_o5 C#_o6 ] "
     "d2 [ F#_o5 A_o5 C#_o6 E_o6 ] "
     "d1 "
-
     # final chirp
     "d2 [ F#_o5 A_o5 C#_o6 E_o6 ] "
     "d1 [ F#_o5 A_o5 C#_o6 E_o6 ] "
@@ -75,17 +72,17 @@ complex_test = (
     "d6 [ G_o5 B_o5 D_o6 F#_o6 ] "
 )
 
-    # "d4 [ A_o5 C#_o6 E_o6 G#_o6 ] "
+# "d4 [ A_o5 C#_o6 E_o6 G#_o6 ] "
 
-    # "[ C#_o6 E_o6 G#_o6 B_o6 ] "
-    # "[ E_o6 G#_o6 B_o6 D_o7 ] "
-    # "[ G#_o6 B_o6 D_o7 F#_o7 ] "
-    # "[ B_o6 D_o7 F#_o7 A_o7 ] "
-    # "[ D_o7 F#_o7 A_o7 C#_o8 ] "
-    # "[ F#_o7 A_o7 C#_o8 E_o8 ] "
-    # "[ A_o7 C#_o8 E_o8 G#_o8 ] "
-    # "[ C#_o8 E_o8 G#_o8 B_o8 ] "
-)
+# "[ C#_o6 E_o6 G#_o6 B_o6 ] "
+# "[ E_o6 G#_o6 B_o6 D_o7 ] "
+# "[ G#_o6 B_o6 D_o7 F#_o7 ] "
+# "[ B_o6 D_o7 F#_o7 A_o7 ] "
+# "[ D_o7 F#_o7 A_o7 C#_o8 ] "
+# "[ F#_o7 A_o7 C#_o8 E_o8 ] "
+# "[ A_o7 C#_o8 E_o8 G#_o8 ] "
+# "[ C#_o8 E_o8 G#_o8 B_o8 ] "
+# )
 
 title = fiddle_to_wav(complex_test)
 path = os.path.join("waves/", f"{title}.wav")
