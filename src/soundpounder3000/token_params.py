@@ -1,4 +1,4 @@
-from utils import parse_num_or_frac
+from .utils import parse_num_or_frac
 
 class TokenParams:
     def __init__(self, token):

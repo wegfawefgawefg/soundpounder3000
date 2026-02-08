@@ -1,14 +1,21 @@
 import math
 import os
+import wave
+from pathlib import Path
 
 import numpy as np
-from pprint import pprint
-from scipy.io.wavfile import write
-import matplotlib.pyplot as plt
 
-from parse import parse_song
-from settings import SAMPLE_RATE
-import settings
+from .parse import parse_song
+from .settings import SAMPLE_RATE
+
+
+def _write_wav_pcm16_mono(path: str, sample_rate: int, data: np.ndarray) -> None:
+    data_i16 = np.asarray(data, dtype=np.int16)
+    with wave.open(path, "wb") as wf:
+        wf.setnchannels(1)
+        wf.setsampwidth(2)  # 16-bit
+        wf.setframerate(sample_rate)
+        wf.writeframes(data_i16.tobytes())
 
 def apply_ramp(waveform, duration=20):
     ramp_duration = int(waveform.shape[0] / duration)
@@ -81,7 +88,6 @@ def gen_string(freq, duration, volume, ramp=True):
     for i in range(1, num_harmonics + 1):
         di = 8.0
         frequency = freq * (float(i + di) / (di + 1))
-        pprint(frequency)
         amp = amplitude * (1.0 / i)
         offset = 0
         wave += amp * np.sin(2 * np.pi * frequency * t + offset)
@@ -107,14 +113,19 @@ def gen_string(freq, duration, volume, ramp=True):
     # plt.show()
     return wave
 
-def fiddle_to_wav(fiddle):
-    title, tones = parse_song(fiddle)
-    pprint(tones)
+def fiddle_to_wav(
+    fiddle: str,
+    *,
+    outdir: str = "waves",
+    outfile: str | None = None,
+    default_title: str = "Untitled",
+) -> str:
+    title, tones = parse_song(fiddle, default_title=default_title)
 
     # tones.sort(key=lambda tone: tone.time, reverse=False)
     last_tone = tones[-1]
     song_length_seconds = int(math.ceil(last_tone.time + last_tone.duration)) 
-    song_length_samples = (song_length_seconds + 1) * settings.SAMPLE_RATE 
+    song_length_samples = (song_length_seconds + 1) * SAMPLE_RATE
     base = np.zeros(song_length_samples)
 
     for tone in tones:
@@ -126,7 +137,7 @@ def fiddle_to_wav(fiddle):
         # plt.show()
 
         time_seconds = tone.time
-        time_samples = int(time_seconds * settings.SAMPLE_RATE)
+        time_samples = int(time_seconds * SAMPLE_RATE)
 
         # duration_time = tone.duration
         # duration_samples = int(tone.duration * settings.SAMPLE_RATE)
@@ -135,8 +146,18 @@ def fiddle_to_wav(fiddle):
         base_indices = waveform_indices + time_samples
         base[base_indices] += waveform[waveform_indices]
 
-    if not os.path.exists("waves"):
-        os.makedirs("./waves")
+    if outfile is None:
+        out_path = Path(outdir) / f"{title}.wav"
+    else:
+        p = Path(outfile)
+        # If given a directory (or a path with no suffix), write `<title>.wav` inside it.
+        if (p.exists() and p.is_dir()) or (p.suffix == "" and str(outfile).endswith(os.sep)):
+            out_path = p / f"{title}.wav"
+        elif p.suffix == "":
+            out_path = p / f"{title}.wav"
+        else:
+            out_path = p
 
-    write(os.path.join("waves/", title + '.wav'), SAMPLE_RATE, base.astype(np.int16))
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    _write_wav_pcm16_mono(str(out_path), SAMPLE_RATE, base)
     return title

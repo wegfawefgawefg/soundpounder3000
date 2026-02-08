@@ -1,0 +1,66 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "SoundPounder SP",
+  "scopeName": "source.soundpounder-sp",
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#groups" },
+    { "include": "#commands" },
+    { "include": "#notes" },
+    { "include": "#numbers" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        { "name": "comment.line.semicolon.soundpounder-sp", "match": ";.*$" },
+        { "name": "comment.line.double-slash.soundpounder-sp", "match": "//.*$" },
+        { "name": "comment.line.hash.soundpounder-sp", "match": "^\\s*#.*$" }
+      ]
+    },
+    "groups": {
+      "patterns": [
+        { "name": "punctuation.section.brackets.soundpounder-sp", "match": "[\\[\\]\\{\\}]" }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        { "name": "constant.numeric.fraction.soundpounder-sp", "match": "(?<![\\w.])-?\\d+\\/\\d+(?![\\w.])" },
+        { "name": "constant.numeric.float.soundpounder-sp", "match": "(?<![\\w.])-?\\d+\\.\\d+(?![\\w.])" },
+        { "name": "constant.numeric.integer.soundpounder-sp", "match": "(?<![\\w.])-?\\d+(?![\\w.])" }
+      ]
+    },
+    "commands": {
+      "patterns": [
+        {
+          "name": "entity.name.tag.title.soundpounder-sp",
+          "match": "(?<!\\S)t[^\\s]+"
+        },
+        {
+          "name": "keyword.other.command.soundpounder-sp",
+          "match": "(?<!\\S)[sdovbri](?=[^\\s])"
+        },
+        {
+          "name": "support.function.move.soundpounder-sp",
+          "match": "(?<!\\S)f-?\\d+(?:\\.\\d+)?(?:\\/\\d+)?"
+        },
+        {
+          "name": "support.type.instrument.soundpounder-sp",
+          "match": "(?<!\\S)i[a-zA-Z_][\\w-]*"
+        }
+      ]
+    },
+    "notes": {
+      "patterns": [
+        {
+          "name": "constant.other.note.soundpounder-sp",
+          "match": "(?<!\\S)(?:[A-G](?:#|b)?)(?=(?:_|\\s|$))"
+        },
+        {
+          "name": "variable.parameter.modifier.soundpounder-sp",
+          "match": "_[dov](?:[+-])?\\d+(?:\\.\\d+)?(?:\\/\\d+)?"
+        }
+      ]
+    }
+  }
+}
+

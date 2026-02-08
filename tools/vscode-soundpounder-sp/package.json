@@ -1,0 +1,35 @@
+{
+  "name": "soundpounder-sp-syntax",
+  "publisher": "local",
+  "displayName": "SoundPounder .sp Syntax",
+  "description": "Syntax highlighting for SoundPounder .sp song files",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "activationEvents": [
+    "onLanguage:soundpounder-sp"
+  ],
+  "main": "./extension.js",
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "soundpounder-sp",
+        "aliases": ["SoundPounder SP", "sp"],
+        "extensions": [".sp"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "soundpounder-sp",
+        "scopeName": "source.soundpounder-sp",
+        "path": "./syntaxes/sp.tmLanguage.json"
+      }
+    ]
+  }
+}
+
