@@ -131,3 +131,6 @@ dmypy.json
 # exclude everything in the waves folder except Computer_Polka.wav
 !waves/Computer_Polka.wav
 waves/*
+
+# videos
+*.mp4

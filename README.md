@@ -36,6 +36,14 @@ uv run main songs/interesting.sp -o out.wav
 uv run main songs/interesting.sp -o ./out_dir/
 ```
 
+## Video (mp4)
+
+Given a `.sp` file and a rendered `.wav`, you can make a simple `.mp4` that shows the title and scrolls through the `.sp` source:
+
+```bash
+uv run python scripts/sp_wav_to_mp4.py songs/interesting.sp waves/interesting.wav -o interesting.mp4
+```
+
 ## Old scripts
 
 These still exist:
