@@ -41,6 +41,7 @@ Instrument selection is done with tokens like `isine`, `isquare`, etc. Instrumen
 ```text
 ipulse:pw=0.2
 istring:harmonics=12,decay=6
+isaw:atk=0.005,rel=0.08,cut=1200,fenv=4200,fatk=0.01,fdec=0.20,fsus=0.0,frel=0.10
 ```
 
 ## Video (mp4)

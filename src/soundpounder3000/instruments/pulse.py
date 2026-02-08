@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from ..dsp import amplitude, apply_ramp, timebase
+from ..dsp import amplitude, timebase
 
 
 def render(freq: float, duration_s: float, volume: float, sample_rate: int, params: dict[str, object]) -> np.ndarray:
@@ -18,4 +18,4 @@ def render(freq: float, duration_s: float, volume: float, sample_rate: int, para
 
     phase = (freq * t) % 1.0
     wave = np.where(phase < pw_f, 1.0, -1.0) * amp
-    return apply_ramp(wave, parts=int(params.get("ramp", 10) or 10))
+    return wave

@@ -16,7 +16,8 @@ C D E F G A B C_o5
 r
 
 ; bright: saw
-isaw
+; add a lowpass + filter envelope for a brassy feel
+isaw:cut=1200,fenv=4200,fatk=0.01,fdec=0.20,fsus=0.0,frel=0.10,atk=0.005,rel=0.08
 C_o4_d1/16 E G C_o5  C_o5 B A G  F E D C_o4
 r
 
@@ -32,7 +33,7 @@ C C C C  G G G G  C_o5 C_o5 C_o5 C_o5  G G G G
 r_d1/4
 
 ; pulse width: thin buzzy lead
-ipulse:pw=0.2
+ipulse:pw=0.2,atk=0.003,dec=0.04,sus=0.7,rel=0.06
 d1/12
 C_o5 D E F G A B C_o6
 r_d1/6
@@ -46,7 +47,7 @@ v1.0
 r_d1/8
 
 ; string-ish pluck (additive + decay)
-istring:harmonics=12,decay=6,detune=8
+istring:harmonics=12,decay=6,detune=8,atk=0.002,rel=0.10
 d1/8
 [ C_o3 G_o3 C_o4 ] r [ D_o3 A_o3 D_o4 ] r [ E_o3 B_o3 E_o4 ] r [ F_o3 C_o4 F_o4 ] r
 r_d1/4
@@ -55,4 +56,3 @@ r_d1/4
 isine
 d1/8
 [ C E G ] r [ F A C_o5 ] r [ G B D_o5 ] r C_o5_d1
-

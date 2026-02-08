@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from ..dsp import amplitude, apply_ramp, timebase
+from ..dsp import amplitude, timebase
 
 
 def render(freq: float, duration_s: float, volume: float, sample_rate: int, params: dict[str, object]) -> np.ndarray:
@@ -16,5 +16,4 @@ def render(freq: float, duration_s: float, volume: float, sample_rate: int, para
     wave *= 2.0
     wave *= amp
 
-    # Slightly shorter ramp to keep the attack snappy.
-    return apply_ramp(wave, parts=10)
+    return wave
