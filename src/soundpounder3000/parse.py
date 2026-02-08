@@ -45,6 +45,39 @@ def beats_to_time(bpm, step_size):
 
     return time_to_step
 
+def parse_instrument_token(token: str) -> tuple[str, dict[str, object]]:
+    # Format: i<name>[:k=v,k=v]
+    spec = token[1:]
+    if ":" in spec:
+        name, rest = spec.split(":", 1)
+    else:
+        name, rest = spec, ""
+    name = name.strip() or "sine"
+
+    params: dict[str, object] = {}
+    rest = rest.strip()
+    if rest:
+        for part in rest.split(","):
+            part = part.strip()
+            if not part:
+                continue
+            if "=" not in part:
+                # Allow bare flags: `ifoo:bar` => {"bar": True}
+                params[part] = True
+                continue
+            k, v = part.split("=", 1)
+            k = k.strip()
+            v = v.strip()
+            if not k:
+                continue
+            # Parse numeric values when possible (float or fraction).
+            try:
+                params[k] = parse_num_or_frac(v)
+            except Exception:
+                params[k] = v
+
+    return name, params
+
 def parse_song(song_string: str, *, default_title: str = "Untitled"):
     tokens = tokenize_song(song_string)
 
@@ -56,7 +89,8 @@ def parse_song(song_string: str, *, default_title: str = "Untitled"):
     time_stack = []
     auto_step = True
     cursor = 0
-    instrument = "sine"
+    instrument_name = "sine"
+    instrument_params: dict[str, object] = {}
     tones = []
     for token in tokens:
         head = token[0]
@@ -86,7 +120,7 @@ def parse_song(song_string: str, *, default_title: str = "Untitled"):
         elif head == '}':   #   pop cursor
             cursor = time_stack.pop()
         elif head == 'i':   #   set instrument
-            instrument = tail
+            instrument_name, instrument_params = parse_instrument_token(token)
         elif head == 'f':   #   move cursor
             if tail == '':  #   no explicit duration given, use base duration
                 cursor += beats_to_time(bpm, base_duration)
@@ -106,7 +140,8 @@ def parse_song(song_string: str, *, default_title: str = "Untitled"):
 
             # print(note)
 
-            tone = Tone(cursor, note, duration, volume, instrument)
+            # Copy params so later `i...` tokens don't mutate previously-emitted tones.
+            tone = Tone(cursor, note, duration, volume, instrument_name, dict(instrument_params))
             tones.append(tone)
 
             if auto_step:

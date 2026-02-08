@@ -1,5 +1,5 @@
 class Tone:
-    def __init__(self, time, note, duration, volume, instrument):
+    def __init__(self, time, note, duration, volume, instrument_name, instrument_params=None):
         # ''' future features? '''
         # self.start_volume = None
         # self.end_volume = None
@@ -9,7 +9,8 @@ class Tone:
         self.note = note
         self.duration = duration
         self.volume = volume
-        self.instrument = instrument
+        self.instrument_name = instrument_name
+        self.instrument_params = instrument_params or {}
 
     def __repr__(self):
         rep = (
@@ -17,7 +18,7 @@ class Tone:
             f"note: {self.note}, "
             f"duration: {self.duration}, "
             f"volume: {self.volume}, "
-            f"instrument: {self.instrument}"
+            f"instrument: {self.instrument_name}"
         )
         
         return rep

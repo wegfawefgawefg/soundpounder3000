@@ -36,6 +36,13 @@ uv run main songs/interesting.sp -o out.wav
 uv run main songs/interesting.sp -o ./out_dir/
 ```
 
+Instrument selection is done with tokens like `isine`, `isquare`, etc. Instruments can also take parameters:
+
+```text
+ipulse:pw=0.2
+istring:harmonics=12,decay=6
+```
+
 ## Video (mp4)
 
 Given a `.sp` file and a rendered `.wav`, you can make a simple `.mp4` that shows the title and scrolls through the `.sp` source:
