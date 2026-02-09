@@ -1,8 +1,7 @@
 # Instrument Showcase
 # Exercises:
-# - instruments: sine, square, noise, string, saw, triangle, pulse, pluck, fm
+# - instruments: sine, square, noise, string, saw, triangle, pulse
 # - instrument params: ipulse:pw=..., istring:harmonics=...,decay=...,detune=...
-# - ADSR + filter: atk/dec/sus/rel, cut/fenv/fatk/fdec/fsus/frel
 # - comments: full-line `#`, inline `;` and `//`
 # - chords: [ ... ]
 
@@ -52,18 +51,6 @@ istring:harmonics=12,decay=6,detune=8,atk=0.002,rel=0.10
 d1/8
 [ C_o3 G_o3 C_o4 ] r [ D_o3 A_o3 D_o4 ] r [ E_o3 B_o3 E_o4 ] r [ F_o3 C_o4 F_o4 ] r
 r_d1/4
-
-; karplus-strong pluck
-ipluck:decay=0.992,bright=0.15,damp=0.35,atk=0.001,rel=0.08
-d1/10
-C_o4 E G C_o5  C_o5 B A G  F E D C_o4
-r_d1/4
-
-; simple FM bell-ish
-ifm:car=1,mod=2,idx=4,atk=0.001,dec=0.15,sus=0.0,rel=0.25
-d1/6
-C_o5 r E_o5 r G_o5 r C_o6 r
-r_d1/6
 
 ; back to sine for a cadence
 isine

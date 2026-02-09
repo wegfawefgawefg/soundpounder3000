@@ -45,7 +45,11 @@
         },
         {
           "name": "support.type.instrument.soundpounder-sp",
-          "match": "(?<!\\S)i[a-zA-Z_][\\w-]*"
+          "match": "(?<!\\S)i[a-zA-Z_][\\w-]*(?::[^\\s]+)?"
+        },
+        {
+          "name": "variable.parameter.instrument.soundpounder-sp",
+          "match": "(?<=:)(?:atk|dec|sus|rel|pw|harmonics|decay|detune|cut|cutoff|fcut|fenv|fatk|fdec|fsus|frel|car|mod|idx|bright|damp)(?==)"
         }
       ]
     },
@@ -63,4 +67,3 @@
     }
   }
 }
-

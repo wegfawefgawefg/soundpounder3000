@@ -5,7 +5,7 @@ from typing import Callable
 
 import numpy as np
 
-from . import noise, pulse, saw, sine, square, string, triangle
+from . import fm, noise, pluck, pulse, saw, sine, square, string, triangle
 from ..dsp import adsr_envelope, lowpass_1p
 
 
@@ -26,6 +26,8 @@ _REGISTRY: dict[str, Instrument] = {
     "saw": Instrument("saw", saw.render),
     "triangle": Instrument("triangle", triangle.render),
     "pulse": Instrument("pulse", pulse.render),
+    "pluck": Instrument("pluck", pluck.render),
+    "fm": Instrument("fm", fm.render),
 }
 
 

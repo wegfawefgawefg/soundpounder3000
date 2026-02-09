@@ -13,21 +13,36 @@ class TokenParams:
             head = sector[0]
             tail = sector[1:]
             if head == 'd':
+                try:
+                    self.duration = parse_num_or_frac(tail)
+                except Exception:
+                    continue
                 self.empty = False
-                self.duration = parse_num_or_frac(tail)
             elif head == "v":
+                try:
+                    self.volume = parse_num_or_frac(tail)
+                except Exception:
+                    continue
                 self.empty = False
-                self.volume = parse_num_or_frac(tail)
             elif head == "o":
-                self.empty = False
                 subhead = tail[0]
                 subtail = tail[1:]
                 if subhead == '+':
-                    self.relative_octave = parse_num_or_frac(subtail)
+                    try:
+                        self.relative_octave = parse_num_or_frac(subtail)
+                    except Exception:
+                        continue
                 elif subhead == '-':
-                    self.relative_octave = -parse_num_or_frac(subtail)
+                    try:
+                        self.relative_octave = -parse_num_or_frac(subtail)
+                    except Exception:
+                        continue
                 else:   #   its a one time absolute octave
-                    self.octave = parse_num_or_frac(tail)
+                    try:
+                        self.octave = parse_num_or_frac(tail)
+                    except Exception:
+                        continue
+                self.empty = False
 
     def __repr__(self):
         attributes = []
