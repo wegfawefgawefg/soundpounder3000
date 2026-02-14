@@ -1,10 +1,10 @@
-tMasterpeace_Chronicles_II s70
+tMasterpeace_Chronicles_III s70
 
-# Iteration v2
-# I   s70  : 4 bars  (mystery intro)
-# II  s92  : 8 bars  (main theme + sequence)
-# III s66  : 4 bars  (bridge / breath)
-# IV  s108 : 8 bars  (finale)
+# Iteration v3
+# I   s70  : 4 bars   intro
+# II  s92  : 8 bars   theme + response
+# III s66  : 16 bars  development arc
+# IV  s108 : 8 bars   finale
 
 {
   # Harmonic bed
@@ -20,6 +20,9 @@ tMasterpeace_Chronicles_II s70
 
   s66 d4
   [ A C E G ] [ G B D_o5 F#_o5 ] [ F# A C#_o5 E_o5 ] [ B D F# A ]
+  [ C E G B ] [ G B D_o5 F#_o5 ] [ A C E G ] [ E G B D_o5 ]
+  [ F A C E ] [ C E G B ] [ D F# A C_o5 ] [ B D F# A ]
+  [ C E G B ] [ A C E G ] [ B D F# A ] [ D F# A C_o5 ]
 
   s108 d4
   [ E G B D_o5 ] [ G B D_o5 F#_o5 ] [ A C E G ] [ C E G B ]
@@ -40,6 +43,9 @@ tMasterpeace_Chronicles_II s70
 
   s66 d1
   A E A C  G D G B  F# C# F# A  B F# B D
+  C G C E  G D G B  A E A C  E B E G
+  F C F A  C G C E  D A D F#  B F# B D
+  C G C E  A E A C  B F# B D  D A D F#
 
   s108 d1
   E B E G  G D G B  A E A C  C G C E
@@ -47,7 +53,7 @@ tMasterpeace_Chronicles_II s70
 }
 
 {
-  # Percussive engine, syncopated with fills
+  # Percussive engine
   inoise
   o4 v0.16
 
@@ -72,6 +78,18 @@ tMasterpeace_Chronicles_II s70
   C r C r  r r C r
   C r C r  C r C r
   C C r C  C r C r
+  C r C C  C r C r
+  C r C r  C C r C
+  C r C C  C r C r
+  C C r C  C r C C
+  C r C r  C r C C
+  C C r C  C r C r
+  C r C C  C C r C
+  C r C r  C C r C
+  C C r C  C r C C
+  C r C C  C C r C
+  C C C r  C r C C
+  C C r C  C r C C
 
   s108 d1/2
   C C r C  C r C C
@@ -85,7 +103,7 @@ tMasterpeace_Chronicles_II s70
 }
 
 {
-  # Triplet ostinato (3 over 2 feel) mainly in active sections
+  # Triplet/compound engine
   ipluck:decay=0.992,bright=0.24,damp=0.30,atk=0.001,rel=0.06
   o4 v0.31
 
@@ -103,8 +121,10 @@ tMasterpeace_Chronicles_II s70
   E B E_o5 G_o5 B_o5 G_o5
 
   s66 d1
-  A E C_o5 A  G D B_o4 G
-  F# C# A_o4 F#  B F# D_o5 B
+  A E C_o5 A  G D B_o4 G  F# C# A_o4 F#  B F# D_o5 B
+  C G E_o5 C  G D B_o4 G  A E C_o5 A  E B G_o4 E
+  F C A_o4 F  C G E_o5 C  D A F#_o4 D  B F# D_o5 B
+  C G E_o5 C  A E C_o5 A  B F# D_o5 B  D A F#_o4 D
 
   s108 d2/3
   E B E_o5 G_o5 E_o5 B
@@ -118,7 +138,7 @@ tMasterpeace_Chronicles_II s70
 }
 
 {
-  # Main lead: motif + sequence + recapitulation
+  # Main lead
   ipulse:pw=0.21,atk=0.007,dec=0.09,sus=0.72,rel=0.15
   o5 v0.79
 
@@ -165,7 +185,7 @@ tMasterpeace_Chronicles_II s70
 }
 
 {
-  # Countermelody / woodwind answer
+  # Countermelody
   itriangle:atk=0.01,dec=0.09,sus=0.66,rel=0.16
   o6 v0.34
 
@@ -214,7 +234,7 @@ tMasterpeace_Chronicles_II s70
 }
 
 {
-  # Offbeat chord stabs (adds groove + syncopation)
+  # Offbeat chord stabs
   isquare:atk=0.004,dec=0.06,sus=0.58,rel=0.08,cut=1600,fenv=1200,fatk=0.01,fdec=0.12,fsus=0.0,frel=0.08
   o4 v0.32 d1/2
 
@@ -239,6 +259,18 @@ tMasterpeace_Chronicles_II s70
   r r r r  r r r r
   r [ F# A C#_o5 ] r [ F# A C#_o5 ]  r [ F# A C#_o5 ] r [ F# A C#_o5 ]
   r [ B D F# ] r [ B D F# ]  r [ B D F# ] r [ B D F# ]
+  r [ C E G ] r [ C E G ]  r [ C E G ] r [ C E G ]
+  r [ G B D_o5 ] r [ G B D_o5 ]  r [ G B D_o5 ] r [ G B D_o5 ]
+  r [ A C E ] r [ A C E ]  r [ A C E ] r [ A C E ]
+  r [ E G B ] r [ E G B ]  r [ E G B ] r [ E G B ]
+  r [ F A C ] r [ F A C ]  r [ F A C ] r [ F A C ]
+  r [ C E G ] r [ C E G ]  r [ C E G ] r [ C E G ]
+  r [ D F# A ] r [ D F# A ]  r [ D F# A ] r [ D F# A ]
+  r [ B D F# ] r [ B D F# ]  r [ B D F# ] r [ B D F# ]
+  r [ C E G ] r [ C E G ]  r [ C E G ] r [ C E G ]
+  r [ A C E ] r [ A C E ]  r [ A C E ] r [ A C E ]
+  r [ B D F# ] r [ B D F# ]  r [ B D F# ] r [ B D F# ]
+  r [ D F# A ] r [ D F# A ]  r [ D F# A ] r [ D F# A ]
 
   s108
   r [ E G B ] r [ E G B ]  r [ E G B ] r [ E G B ]
@@ -252,14 +284,14 @@ tMasterpeace_Chronicles_II s70
 }
 
 {
-  # Bell sparkle and cadential highlights
+  # Bell sparkle and cadence markers
   ifm:car=1,mod=2,idx=4.8,atk=0.002,dec=0.18,sus=0.0,rel=0.34
   o6 v0.24
 
   s70 d2
   r r  E r  C r  B r
 
-  s92 d1
+  s92 d1/2
   E r G r  C r E r
   D r F# r  G r B r
   C r E r  A r C_o7 r
@@ -269,10 +301,25 @@ tMasterpeace_Chronicles_II s70
   A r E r  B r F# r
   E r G r  B r E_o7 r
 
-  s66 d2
-  A r  G r  F# r  B r
+  s66 d1
+  A r G r
+  F# r B r
+  C r G r
+  A r E r
+  F r C r
+  D r B r
+  C r A r
+  B r D_o7 r
+  E_o7 r D_o7 r
+  C_o7 r B_o6 r
+  A_o6 r G_o6 r
+  F#_o6 r E_o6 r
+  D_o6 r C_o6 r
+  B_o5 r A_o5 r
+  G_o5 r F#_o5 r
+  E_o5 r D_o5 r
 
-  s108 d1
+  s108 d1/2
   E r B r  G r D r
   A r E r  C r G r
   D r A r  B r F# r
