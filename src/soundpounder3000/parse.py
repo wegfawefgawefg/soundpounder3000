@@ -29,6 +29,7 @@ class NoteEvent:
     octave: float
     instrument_name: str
     instrument_params: dict[str, object]
+    inline_comment: str
 
 
 def _comment_cut_index(line: str) -> int:
@@ -57,6 +58,32 @@ def _strip_comments(line: str) -> str:
 
     s = line[:_comment_cut_index(line)]
     return s.strip()
+
+
+def extract_inline_comment(line: str) -> str:
+    stripped = line.lstrip()
+    if stripped.startswith("#"):
+        return stripped[1:].strip()
+
+    idxs: list[int] = []
+    for delim in ("//", ";", " #"):
+        idx = line.find(delim)
+        if idx != -1:
+            idxs.append(idx)
+    if not idxs:
+        return ""
+
+    idx = min(idxs)
+    comment = line[idx:]
+    if comment.startswith(" #"):
+        comment = comment[1:]
+    if comment.startswith("//"):
+        comment = comment[2:]
+    elif comment.startswith(";"):
+        comment = comment[1:]
+    elif comment.startswith("#"):
+        comment = comment[1:]
+    return comment.strip()
 
 
 def tokenize_song(song_string: str) -> list[str]:
@@ -127,6 +154,7 @@ def _parse_song_tokens(
     *,
     default_title: str,
     token_locations: dict[int, TokenLocation] | None = None,
+    line_comments: dict[int, str] | None = None,
 ) -> tuple[str, list[Tone], list[NoteEvent]]:
     title = default_title
     bpm = 60
@@ -206,6 +234,7 @@ def _parse_song_tokens(
                         octave=float(octave),
                         instrument_name=instrument_name,
                         instrument_params=dict(instrument_params),
+                        inline_comment=(line_comments or {}).get(loc.line, ""),
                     )
                 )
 
@@ -225,4 +254,14 @@ def parse_song_with_events(song_string: str, *, default_title: str = "Untitled")
     token_locs = tokenize_song_with_locations(song_string)
     tokens = [x.token for x in token_locs]
     loc_by_index = {x.index: x for x in token_locs}
-    return _parse_song_tokens(tokens, default_title=default_title, token_locations=loc_by_index)
+    comments: dict[int, str] = {}
+    for line_no, raw in enumerate(song_string.splitlines(), start=1):
+        c = extract_inline_comment(raw)
+        if c:
+            comments[line_no] = c
+    return _parse_song_tokens(
+        tokens,
+        default_title=default_title,
+        token_locations=loc_by_index,
+        line_comments=comments,
+    )

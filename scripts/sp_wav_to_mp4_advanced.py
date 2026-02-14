@@ -9,10 +9,14 @@ from bisect import bisect_right
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 
 from PIL import Image, ImageDraw, ImageFont
 
 from soundpounder3000.parse import NoteEvent, parse_song_with_events
+
+
+Color = Literal["default", "comment", "command", "note", "number", "bracket", "modifier"]
 
 
 @dataclass(frozen=True)
@@ -20,6 +24,9 @@ class PaneRow:
     token: str
     start_s: float
     end_s: float
+    color: Color
+    params_text: str
+    inline_comment: str
 
 
 @dataclass
@@ -48,6 +55,42 @@ def _ffprobe_duration_seconds(path: Path) -> float:
         return float(dur)
     except Exception:
         return 0.0
+
+
+def _classify_token(tok: str) -> Color:
+    if tok in ("[", "]", "{", "}"):
+        return "bracket"
+    if tok.startswith("t") and len(tok) > 1:
+        return "command"
+    if tok.startswith("i") and len(tok) > 1:
+        return "command"
+    if tok.startswith("f") and len(tok) > 1:
+        return "command"
+    if tok[:1] in ("s", "d", "o", "v", "b", "r") and len(tok) > 1:
+        return "command"
+    if tok.startswith("_") and len(tok) > 2 and tok[1] in ("d", "o", "v"):
+        return "modifier"
+    if tok[:1] in "ABCDEFG" and (len(tok) == 1 or tok[1:2] in ("#", "b")):
+        return "note"
+    if tok.replace("-", "", 1).replace(".", "", 1).isdigit():
+        return "number"
+    if "/" in tok:
+        a, b = tok.split("/", 1)
+        if a.replace("-", "", 1).isdigit() and b.isdigit():
+            return "number"
+    return "default"
+
+
+def _color_for_token(tok: str) -> Color:
+    head = tok.split("_", 1)[0]
+    return _classify_token(head if head else tok)
+
+
+def _format_params(params: dict[str, object]) -> str:
+    if not params:
+        return "defaults"
+    bits = [f"{k}={v}" for k, v in sorted(params.items())]
+    return ",".join(bits)
 
 
 def _merge_windows(events: list[NoteEvent], idle_hold_s: float) -> list[tuple[float, float]]:
@@ -80,7 +123,17 @@ def _build_lanes(events: list[NoteEvent], idle_hold_s: float) -> list[Lane]:
     lanes: list[Lane] = []
     for name in sorted(grouped.keys(), key=first_start):
         evs = sorted(grouped[name], key=lambda e: (e.start_s, e.line, e.column))
-        rows = [PaneRow(token=e.token, start_s=e.start_s, end_s=e.end_s) for e in evs]
+        rows = [
+            PaneRow(
+                token=e.token,
+                start_s=e.start_s,
+                end_s=e.end_s,
+                color=_color_for_token(e.token),
+                params_text=_format_params(e.instrument_params),
+                inline_comment=e.inline_comment,
+            )
+            for e in evs
+        ]
         starts = [r.start_s for r in rows]
         windows = _merge_windows(evs, idle_hold_s=idle_hold_s)
         lanes.append(Lane(name=name, rows=rows, starts=starts, windows=windows))
@@ -131,8 +184,10 @@ def _layout(count: int, width: int, height: int, top_y: int, gap: int) -> list[t
     cols = max(1, math.ceil(math.sqrt(count * (width / max(1, body_h)))))
     rows = math.ceil(count / cols)
 
-    pane_w = (width - gap * (cols + 1)) // cols
-    pane_h = (body_h - gap * (rows + 1)) // rows
+    usable_w = max(1, width - gap * (cols - 1))
+    usable_h = max(1, body_h - gap * (rows - 1))
+    pane_w = max(1, usable_w // cols)
+    pane_h = max(1, usable_h // rows)
 
     rects: list[tuple[int, int, int, int]] = []
     idx = 0
@@ -140,11 +195,42 @@ def _layout(count: int, width: int, height: int, top_y: int, gap: int) -> list[t
         for c in range(cols):
             if idx >= count:
                 break
-            x = gap + c * (pane_w + gap)
-            y = top_y + gap + r * (pane_h + gap)
-            rects.append((x, y, pane_w, pane_h))
+            x = c * (pane_w + gap)
+            y = top_y + r * (pane_h + gap)
+            w = pane_w if c < cols - 1 else width - x
+            h = pane_h if r < rows - 1 else (height - y)
+            rects.append((x, y, max(1, w), max(1, h)))
             idx += 1
     return rects
+
+
+def _rgb_for_class(c: Color) -> tuple[int, int, int]:
+    colors: dict[Color, tuple[int, int, int]] = {
+        "default": (255, 255, 255),
+        "comment": (122, 122, 122),
+        "command": (0, 215, 255),
+        "note": (124, 252, 0),
+        "number": (255, 165, 0),
+        "bracket": (197, 134, 192),
+        "modifier": (156, 220, 254),
+    }
+    return colors[c]
+
+
+def _dim(rgb: tuple[int, int, int], f: float) -> tuple[int, int, int]:
+    return (int(rgb[0] * f), int(rgb[1] * f), int(rgb[2] * f))
+
+
+def _scrolling_text(s: str, *, t: float, max_chars: int) -> str:
+    if max_chars <= 0:
+        return ""
+    if len(s) <= max_chars:
+        return s
+    spacer = "   |   "
+    stream = s + spacer
+    shift = int(t * 8) % len(stream)
+    wrapped = stream + stream
+    return wrapped[shift : shift + max_chars]
 
 
 def _draw_pane(
@@ -159,15 +245,40 @@ def _draw_pane(
 
     bg = (16, 20, 24)
     border = (72, 84, 96)
-    draw.rounded_rectangle((x, y, x + w, y + h), radius=12, fill=bg, outline=border, width=2)
+    draw.rectangle((x, y, x + w, y + h), fill=bg, outline=border, width=1)
 
-    header_h = 34
+    header_h = 28
     draw.rectangle((x, y, x + w, y + header_h), fill=(34, 43, 53))
-    draw.text((x + 10, y + 8), lane.name, font=font_title, fill=(240, 245, 250))
+    draw.text((x + 6, y + 5), lane.name, font=font_title, fill=(240, 245, 250))
 
-    body_x = x + 10
+    active_idxs = [i for i, row in enumerate(lane.rows) if row.start_s <= t < row.end_s]
+    if active_idxs:
+        center_idx = active_idxs[0]
+    else:
+        center_idx = max(0, bisect_right(lane.starts, t) - 1)
+
+    active_row = lane.rows[center_idx] if lane.rows else None
+    ticker_bits: list[str] = []
+    if active_row is not None:
+        ticker_bits.append(active_row.params_text)
+        if active_row.inline_comment:
+            ticker_bits.append("# " + active_row.inline_comment)
+    ticker = "  ".join(ticker_bits)
+    name_w = int(draw.textlength(lane.name, font=font_title))
+    ticker_x = x + 12 + name_w
+    ticker_w = max(0, (x + w - 6) - ticker_x)
+    if ticker and ticker_w > 24:
+        max_chars = max(8, int(ticker_w / 8))
+        draw.text(
+            (ticker_x, y + 5),
+            _scrolling_text(ticker, t=t, max_chars=max_chars),
+            font=font_title,
+            fill=(156, 188, 220),
+        )
+
+    body_x = x + 6
     body_y = y + header_h + 8
-    body_w = max(1, w - 20)
+    body_w = max(1, w - 12)
     body_h = max(1, h - header_h - 16)
 
     line_h = 20
@@ -176,12 +287,6 @@ def _draw_pane(
     if not lane.rows:
         draw.text((body_x, body_y), "(no notes)", font=font_body, fill=(130, 140, 150))
         return
-
-    active_idxs = [i for i, row in enumerate(lane.rows) if row.start_s <= t < row.end_s]
-    if active_idxs:
-        center_idx = active_idxs[0]
-    else:
-        center_idx = max(0, bisect_right(lane.starts, t) - 1)
 
     start_idx = max(0, center_idx - max_rows // 2)
     end_idx = min(len(lane.rows), start_idx + max_rows)
@@ -197,25 +302,28 @@ def _draw_pane(
         is_past = row.end_s <= t
 
         if is_active:
-            draw.rounded_rectangle(
-                (body_x - 4, yy - 1, body_x + body_w - 4, yy + line_h - 2),
-                radius=5,
+            draw.rectangle(
+                (x + 1, yy - 1, x + w - 1, yy + line_h - 2),
                 fill=(35, 88, 60),
-                outline=(73, 173, 106),
-                width=1,
             )
 
         if is_active:
             color = (232, 255, 240)
-        elif is_past:
-            color = (128, 138, 146)
         else:
-            color = (200, 210, 218)
+            base = _rgb_for_class(row.color)
+            color = _dim(base, 0.55) if is_past else base
 
         text = row.token
         if len(text) > max_chars:
             text = text[: max_chars - 1] + "…"
         draw.text((body_x, yy), text, font=font_body, fill=color)
+
+    if active_row is not None and active_row.inline_comment:
+        comment = "; " + active_row.inline_comment
+        max_comment_chars = max(8, int((w - 12) / 8))
+        if len(comment) > max_comment_chars:
+            comment = comment[: max_comment_chars - 1] + "…"
+        draw.text((x + 6, y + h - 18), comment, font=font_body, fill=_rgb_for_class("comment"))
 
 
 def _render_frame(
@@ -242,7 +350,7 @@ def _render_frame(
         draw.text((20, top_h + 20), "(no active instruments)", font=font_body, fill=(150, 160, 170))
         return img
 
-    rects = _layout(len(active_lanes), width, height, top_y=top_h, gap=10)
+    rects = _layout(len(active_lanes), width, height, top_y=top_h, gap=0)
     for lane, rect in zip(active_lanes, rects):
         _draw_pane(draw, lane, rect, t, font_pane_title, font_body)
 
