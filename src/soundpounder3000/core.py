@@ -26,9 +26,11 @@ def fiddle_to_wav(
 ) -> str:
     title, tones = parse_song(fiddle, default_title=default_title)
 
-    # tones.sort(key=lambda tone: tone.time, reverse=False)
-    last_tone = tones[-1]
-    song_length_seconds = int(math.ceil(last_tone.time + last_tone.duration)) 
+    if tones:
+        song_end = max(tone.time + tone.duration for tone in tones)
+    else:
+        song_end = 0.0
+    song_length_seconds = int(math.ceil(song_end))
     song_length_samples = (song_length_seconds + 1) * SAMPLE_RATE
     base = np.zeros(song_length_samples)
 
