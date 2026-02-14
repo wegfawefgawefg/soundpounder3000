@@ -1,9 +1,49 @@
 import math
+import re
+from dataclasses import dataclass
 
 from .token_params import TokenParams
 from .utils import parse_num_or_frac
 from .tone import Tone
 from .note import Note
+
+
+@dataclass(frozen=True)
+class TokenLocation:
+    token: str
+    index: int
+    line: int
+    column: int
+
+
+@dataclass
+class NoteEvent:
+    token: str
+    token_index: int
+    line: int
+    column: int
+    start_s: float
+    duration_s: float
+    end_s: float
+    note: str
+    octave: float
+    instrument_name: str
+    instrument_params: dict[str, object]
+
+
+def _comment_cut_index(line: str) -> int:
+    if line.lstrip().startswith("#"):
+        return 0
+
+    cut = len(line)
+    for delim in ("//", ";"):
+        idx = line.find(delim)
+        if idx != -1:
+            cut = min(cut, idx)
+    idx = line.find(" #")
+    if idx != -1:
+        cut = min(cut, idx)
+    return cut
 
 
 def _strip_comments(line: str) -> str:
@@ -12,30 +52,34 @@ def _strip_comments(line: str) -> str:
     # - `; ...` end-of-line comments
     # - `// ...` end-of-line comments
     # - `# ...` only as a full-line comment (or after whitespace as ` # ...`)
-    s = line
-
-    # Full-line '#' comments.
-    if s.lstrip().startswith("#"):
+    if line.lstrip().startswith("#"):
         return ""
 
-    # Inline comments.
-    for delim in ("//", ";"):
-        idx = s.find(delim)
-        if idx != -1:
-            s = s[:idx]
-    idx = s.find(" #")
-    if idx != -1:
-        s = s[:idx]
+    s = line[:_comment_cut_index(line)]
     return s.strip()
 
 
 def tokenize_song(song_string: str) -> list[str]:
-    tokens: list[str] = []
-    for line in song_string.splitlines():
-        line = _strip_comments(line)
-        if not line:
+    return [t.token for t in tokenize_song_with_locations(song_string)]
+
+
+def tokenize_song_with_locations(song_string: str) -> list[TokenLocation]:
+    tokens: list[TokenLocation] = []
+    index = 0
+    for line_no, raw in enumerate(song_string.splitlines(), start=1):
+        if raw.lstrip().startswith("#"):
             continue
-        tokens.extend(line.split())
+        code = raw[:_comment_cut_index(raw)]
+        for m in re.finditer(r"\S+", code):
+            tokens.append(
+                TokenLocation(
+                    token=m.group(0),
+                    index=index,
+                    line=line_no,
+                    column=m.start() + 1,
+                )
+            )
+            index += 1
     return tokens
 
 
@@ -78,9 +122,12 @@ def parse_instrument_token(token: str) -> tuple[str, dict[str, object]]:
 
     return name, params
 
-def parse_song(song_string: str, *, default_title: str = "Untitled"):
-    tokens = tokenize_song(song_string)
-
+def _parse_song_tokens(
+    tokens: list[str],
+    *,
+    default_title: str,
+    token_locations: dict[int, TokenLocation] | None = None,
+) -> tuple[str, list[Tone], list[NoteEvent]]:
     title = default_title
     bpm = 60
     base_octave = 4
@@ -91,8 +138,9 @@ def parse_song(song_string: str, *, default_title: str = "Untitled"):
     cursor = 0
     instrument_name = "sine"
     instrument_params: dict[str, object] = {}
-    tones = []
-    for token in tokens:
+    tones: list[Tone] = []
+    note_events: list[NoteEvent] = []
+    for token_index, token in enumerate(tokens):
         head = token[0]
         tail = token[1:]
         token_params = TokenParams(token)
@@ -143,9 +191,38 @@ def parse_song(song_string: str, *, default_title: str = "Untitled"):
             # Copy params so later `i...` tokens don't mutate previously-emitted tones.
             tone = Tone(cursor, note, duration, volume, instrument_name, dict(instrument_params))
             tones.append(tone)
+            if token_locations is not None and token_index in token_locations:
+                loc = token_locations[token_index]
+                note_events.append(
+                    NoteEvent(
+                        token=token,
+                        token_index=token_index,
+                        line=loc.line,
+                        column=loc.column,
+                        start_s=cursor,
+                        duration_s=duration,
+                        end_s=cursor + duration,
+                        note=note_string,
+                        octave=float(octave),
+                        instrument_name=instrument_name,
+                        instrument_params=dict(instrument_params),
+                    )
+                )
 
             if auto_step:
                 cursor += duration
 
+    return title, tones, note_events
+
+
+def parse_song(song_string: str, *, default_title: str = "Untitled"):
+    tokens = tokenize_song(song_string)
+    title, tones, _ = _parse_song_tokens(tokens, default_title=default_title)
     return title, tones
-            
+
+
+def parse_song_with_events(song_string: str, *, default_title: str = "Untitled") -> tuple[str, list[Tone], list[NoteEvent]]:
+    token_locs = tokenize_song_with_locations(song_string)
+    tokens = [x.token for x in token_locs]
+    loc_by_index = {x.index: x for x in token_locs}
+    return _parse_song_tokens(tokens, default_title=default_title, token_locations=loc_by_index)

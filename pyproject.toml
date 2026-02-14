@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Tiny fiddle-string-to-WAV synth."
 readme = "README.md"
 requires-python = ">=3.11"
-dependencies = ["numpy>=2.4.2"]
+dependencies = ["numpy>=2.4.2", "pillow>=11.0.0"]
 
 [project.scripts]
 main = "soundpounder3000.__main__:main"

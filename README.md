@@ -50,6 +50,9 @@ Given a `.sp` file and a rendered `.wav`, you can make a simple `.mp4` that show
 
 ```bash
 uv run python scripts/sp_wav_to_mp4.py songs/interesting.sp waves/interesting.wav -o interesting.mp4
+
+# Advanced pane-based renderer (adaptive instrument panes + note highlights)
+uv run python scripts/sp_wav_to_mp4_advanced.py songs/interesting.sp waves/interesting.wav -o interesting.advanced.mp4
 ```
 
 ## Old scripts
